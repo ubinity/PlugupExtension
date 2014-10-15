@@ -1,6 +1,6 @@
 /*
 ************************************************************************
-Copyright (c) 2013 UBINITY SAS
+Copyright (c) 2013-2014 UBINITY SAS
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,7 +18,9 @@ limitations under the License.
 
 // Dumb bridge between the web page and the packaged application
 
-var DEBUG = true;
+var DEBUG = false;
+
+var plugupBridge = plugupBridge || {};
 
 function debug(message) {
   if (DEBUG) {
