@@ -18,7 +18,7 @@ limitations under the License.
 
 'use strict';
 
-var DEBUG = true;
+var DEBUG = false;
 var authorizedCallers = [];
 
 function loadAuthorizedCallers() {
