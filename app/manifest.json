@@ -19,19 +19,17 @@
    "manifest_version": 2,
    "minimum_chrome_version": "26.0.1410.28",
    "name": "Plug-Up Bridge",
-   "optional_permissions": [ {
-      "usbDevices": [ {
-         "productId": 6152,
-         "vendorId": 9601
-      }, {
-         "productId": 7036,
-         "vendorId": 9601
-      }, {
-         "productId": 61904,
-         "vendorId": 9601
-      } ]
-   } ],
-   "permissions": [ "usb", "notifications", "storage" ],
+   "permissions": [ "hid", "usb", "notifications", "storage", 
+      {
+      "usbDevices": [ 
+         { "productId": 6151,  "vendorId": 9601 }, 
+         { "productId": 6152,  "vendorId": 9601 }, 
+         { "productId": 7036,  "vendorId": 9601 },
+         { "productId": 11132, "vendorId": 9601 },
+         { "productId": 61904, "vendorId": 9601 }
+       ]
+      } 
+   ],
    "update_url": "https://clients2.google.com/service/update2/crx",
-   "version": "0.1.1"
+   "version": "0.1.2"
 }
