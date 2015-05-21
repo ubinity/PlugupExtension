@@ -722,8 +722,11 @@ chrome.runtime.onConnectExternal.addListener(function(port) {
           processMessage(msg);                        
           chrome.storage.sync.set({"authorizedCallers" : authorizedCallers}, function() {
             var lastError = chrome.runtime.lastError;
-            if (lastError && lastError.message.match("QUOTA_BYTES_PER_ITEM"))
+            if (lastError && lastError.message.match("QUOTA_BYTES_PER_ITEM")) {
               authorizedCallers = [];
+            } else if (lastError) {
+              console.error("Fail to save authorizedCallers :", lastError.message);
+            }
           });
         }
       }
