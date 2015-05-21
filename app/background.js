@@ -20,6 +20,7 @@ limitations under the License.
 
 var DEBUG = false;
 var authorizedCallers = [];
+var URLPARSER = /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*):?([^:@]*))?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/;
 
 function loadAuthorizedCallers() {
   chrome.storage.sync.get(function(result) {
@@ -665,8 +666,12 @@ chrome.runtime.onConnectExternal.addListener(function(port) {
         return;
       }
 
-      var key;
+      var key, match;
       var extension = false;
+      if (typeof port.sender.url == "string" && match = url.match(URLPARSER)) {
+        key = match[1] + "://" + match[6];
+      }
+      else
       if (typeof port.sender.url != "undefined") {
 	       key = port.sender.url;
       }
