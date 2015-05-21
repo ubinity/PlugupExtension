@@ -668,8 +668,9 @@ chrome.runtime.onConnectExternal.addListener(function(port) {
 
       var key, match;
       var extension = false;
-      if (typeof port.sender.url == "string" && match = url.match(URLPARSER)) {
-        key = match[1] + "://" + match[6];
+      if (typeof port.sender.url == "string") {
+        match = port.sender.url.match(URLPARSER);
+        key = (match ? match[1] + "://" + match[6] : port.sender.url);
       }
       else
       if (typeof port.sender.url != "undefined") {
