@@ -720,7 +720,11 @@ chrome.runtime.onConnectExternal.addListener(function(port) {
           authorizedCallers.push(key);
           authorized = true;
           processMessage(msg);                        
-          chrome.storage.sync.set({ "authorizedCallers" : authorizedCallers});
+          chrome.storage.sync.set({"authorizedCallers" : authorizedCallers}, function() {
+            var lastError = chrome.runtime.lastError;
+            if (lastError && lastError.message.match("QUOTA_BYTES_PER_ITEM"))
+              authorizedCallers = [];
+          });
         }
       }
   });
