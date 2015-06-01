@@ -20,6 +20,7 @@ limitations under the License.
 
 var DEBUG = false;
 var authorizedCallers = [];
+var URLPARSER = /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*):?([^:@]*))?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/;
 
 function loadAuthorizedCallers() {
   chrome.storage.sync.get(function(result) {
@@ -665,8 +666,13 @@ chrome.runtime.onConnectExternal.addListener(function(port) {
         return;
       }
 
-      var key;
+      var key, match;
       var extension = false;
+      if (typeof port.sender.url == "string") {
+        match = port.sender.url.match(URLPARSER);
+        key = (match ? match[1] + "://" + match[6] : port.sender.url);
+      }
+      else
       if (typeof port.sender.url != "undefined") {
 	       key = port.sender.url;
       }
@@ -715,7 +721,14 @@ chrome.runtime.onConnectExternal.addListener(function(port) {
           authorizedCallers.push(key);
           authorized = true;
           processMessage(msg);                        
-          chrome.storage.sync.set({ "authorizedCallers" : authorizedCallers});
+          chrome.storage.sync.set({"authorizedCallers" : authorizedCallers}, function() {
+            var lastError = chrome.runtime.lastError;
+            if (lastError && lastError.message.match("QUOTA_BYTES_PER_ITEM")) {
+              authorizedCallers = [];
+            } else if (lastError) {
+              console.error("Fail to save authorizedCallers :", lastError.message);
+            }
+          });
         }
       }
   });
